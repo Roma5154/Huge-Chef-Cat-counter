@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HUGE Chef Cat! Awarded counter🐈🧑‍🍳</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <h1>Roblox Badge Counter</h1>
+  <p>The current number of Huge Chef Cats awarded is: <span id="badge-counter">Loading...</span></p>
+  <p id="badge-status" style="display:none;">Out of cats! or 50K is reached, meaning the event is over.😢</p>
+  <p id="stock-left"></p>
+  <p id="reload-timer" style="display:none;">Reloading in <span id="countdown-timer">10</span> seconds...</p>
+
+  <script>
+    const badgeId = '2142990009';
+    const apiUrl = `https://badges.roproxy.com/v1/badges/${badgeId}`;
+    const badgeCounter = document.getElementById('badge-counter');
+    const badgeStatus = document.getElementById('badge-status');
+    const stockLeft = document.getElementById('stock-left');
+    const reloadTimer = document.getElementById('reload-timer');
+    const countdownTimer = document.getElementById('countdown-timer');
+
+    let timeLeft = 10;
+    let timerId = null;
+
+    function startTimer() {
+      timeLeft = 10;
+      countdownTimer.textContent = timeLeft;
+      reloadTimer.style.display = 'block';
+      timerId = setInterval(() => {
+        timeLeft--;
+        countdownTimer.textContent = timeLeft;
+        if (timeLeft === 0) {
+          clearInterval(timerId);
+          reloadTimer.style.display = 'none';
+          fetchBadgeData();
+        }
+      }, 1000);
+    }
+
+    function fetchBadgeData() {
+      badgeCounter.textContent = "Loading...";
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const awardedCount = data.statistics.awardedCount;
+          badgeCounter.textContent = awardedCount.toLocaleString();
+          if (awardedCount >= 50000) {
+            badgeStatus.style.display = 'block';
+            stockLeft.textContent = '';
+          } else {
+            badgeStatus.style.display = 'none';
+            stockLeft.textContent = `Cats left: ${50000 - awardedCount}`;
+          }
+          startTimer();
+        })
+        .catch(error => {
+          console.error(error);
+          badgeCounter.textContent = "Error fetching data";
+          startTimer();
+        });
+    }
+
+    fetchBadgeData();
+  </script>
+</body>
+</html>
