@@ -8,7 +8,7 @@
 <body>
   <h1>HUGE Chef Cat! Awarded counter🐈🧑‍🍳</h1>
   <p>The current number of Huge Chef Cats awarded is: <span id="badge-counter">Loading...</span></p>
-  <p id="badge-status" style="display:none;">Out of cats! or 50K is reached, meaning the event is over.😢</p>
+  <p id="badge-status" style="display:none;">Out of cats! or 100K is reached, meaning the event is over.😢</p>
   <p id="stock-left"></p>
   <p id="reload-timer" style="display:none;">Reloading in <span id="countdown-timer">10</span> seconds...</p>
 
@@ -46,12 +46,12 @@
         .then(data => {
           const awardedCount = data.statistics.awardedCount;
           badgeCounter.textContent = awardedCount.toLocaleString();
-          if (awardedCount >= 50000) {
+          if (awardedCount >= 100000) {
             badgeStatus.style.display = 'block';
             stockLeft.textContent = '';
           } else {
             badgeStatus.style.display = 'none';
-            stockLeft.textContent = `Cats left: ${50000 - awardedCount}`;
+            stockLeft.textContent = `Cats left: ${100000 - awardedCount}`;
           }
           startTimer();
         })
